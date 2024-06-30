@@ -1,0 +1,64 @@
+{
+    "output_file": "image.ppm",
+    "show_progress": true,
+    "camera": {
+        "image_w": 256,
+        "image_h": 200,
+        "location": [0, 1.5, 0],
+        "lookat": [0, 0.3, -3],
+        "fov": 40.0,
+        "defocus_angle": 5.0,
+        "rays_per_pixel": 1000,
+        "max_depth": 10
+    },
+    "scene" : [
+        {
+            "center": [-0.45, 0.2, -2.8],
+            "radius": 0.2,
+            "material": {
+                "type": "lambertian",
+                "color": [255, 51, 51],
+                "emmision": 0
+            }
+        },
+        {
+            "center": [0, 0.3, -3],
+            "radius": 0.3,
+            "material": {
+                "type": "glass",
+                "color": [250, 250, 250],
+                "emmision": 0,
+                "refraction": 1.5,
+                "fuzz": 0.0
+            }
+        },
+        {
+            "center": [0, 0.2, -5],
+            "radius": 0.2,
+            "material": {
+                "type": "lambertian",
+                "color": [0, 0, 255],
+                "emmision": 0
+            }
+        },
+        {
+            "center": [0.45, 0.2, -2.8],
+            "radius": 0.2,
+            "material": {
+                "type": "metal",
+                "color": [255, 255, 255],
+                "emmision": 0,
+                "fuzz": 0
+            }
+        },
+        {
+            "center": [0, -100, -3],
+            "radius": 100,
+            "material": {
+                "type": "lambertian",
+                "color": [76, 153, 0],
+                "emmision": 0
+            }
+        }
+    ]
+}
