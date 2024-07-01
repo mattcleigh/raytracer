@@ -7,5 +7,5 @@ Mainly to refamiliarize myself with CUDA.
 
 TODO:
 - [x] Basic ray tracing in C++
-- [] Rewrite in CUDA
-- [] Rewrite in JAX
+- [ ] Rewrite in CUDA
+- [ ] Rewrite in JAX
