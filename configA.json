@@ -7,9 +7,10 @@
         "location": [0, 1.5, 0],
         "lookat": [0, 0.3, -3],
         "fov": 40.0,
+        "focal_dist": 0.0,
         "defocus_angle": 5.0,
-        "rays_per_pixel": 1000,
-        "max_depth": 10
+        "rays_per_pixel": 100,
+        "max_depth": 50
     },
     "scene" : [
         {

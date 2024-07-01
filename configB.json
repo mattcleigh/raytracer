@@ -2,14 +2,14 @@
     "output_file": "image.ppm",
     "show_progress": true,
     "camera": {
-        "image_w": 256,
-        "image_h": 180,
+        "image_w": 960,
+        "image_h": 540,
         "location": [13, 2, 3],
         "lookat": [0, 0, 0],
         "fov": 30.0,
         "focal_dist": 10.0,
         "defocus_angle": 0.6,
-        "rays_per_pixel": 100,
-        "max_depth": 5
+        "rays_per_pixel": 1,
+        "max_depth": 1
     }
 }

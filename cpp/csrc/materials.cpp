@@ -1,43 +1,43 @@
 #include "materials.h"
 
-void Lambertian::scatter(Ray &r, const HitRecord &hitrecord, color &c, color &light,
+void Lambertian::scatter(Ray &r, const HitRecord &hitrecord, float3 &c, float3 &light,
                          unsigned &state) const {
     // Direction is cosine weighted random direction
-    r.dir = random_lambertian(hitrecord.normal, state);
+    r.direction = random_lambertian(hitrecord.normal, state);
 
     // Standard updates
-    r.orig = hitrecord.hitPoint;
+    r.origin = hitrecord.hitPoint;
     light += emmision * col * col;
     c *= col;
 }
 
-void Metal::scatter(Ray &r, const HitRecord &hitrecord, color &c, color &light,
+void Metal::scatter(Ray &r, const HitRecord &hitrecord, float3 &c, float3 &light,
                     unsigned &state) const {
     // Direction is reflected ray with a bit of fuzz
-    vec3 reflected = reflect(r.direction(), hitrecord.normal);
-    r.dir = reflected;
+    float3 reflected = reflect(r.direction, hitrecord.normal);
+    r.direction = reflected;
     if (fuzz > 0) {
-        r.dir = r.dir.normalize() + fuzz * random_on_unit_sphere(state);
+        r.direction = r.direction.normalize() + fuzz * random_on_unit_sphere(state);
     }
 
     // Standard updates
-    r.orig = hitrecord.hitPoint;
+    r.origin = hitrecord.hitPoint;
     light += emmision * col * c;
     c *= col;
 }
 
-void Dielectric::scatter(Ray &r, const HitRecord &hitrecord, color &c, color &light,
+void Dielectric::scatter(Ray &r, const HitRecord &hitrecord, float3 &c, float3 &light,
                          unsigned &state) const {
     // Calculate if we are entering or exiting the material
     float ref_ratio = hitrecord.hitFront ? 1.0 / refraction : refraction;
 
     // Check for total internal reflection
-    vec3 normed_dir = r.dir.normalize();
+    float3 normed_dir = r.direction.normalize();
     float cos_i = fmin(-dot(normed_dir, hitrecord.normal), 1.0);
     float sin_i = sqrt(fmax(1 - cos_i * cos_i, 0));
     bool tif = ref_ratio * sin_i > 1.0;
     if (tif) {
-        r.dir = reflect(normed_dir, hitrecord.normal);
+        r.direction = reflect(normed_dir, hitrecord.normal);
     }
 
     // Otherwise calculate the probability of reflection using Schlick's approximation
@@ -47,19 +47,19 @@ void Dielectric::scatter(Ray &r, const HitRecord &hitrecord, color &c, color &li
         ref_prob = ref_prob + (1 - ref_prob) * pow(1 - cos_i, 5);
         // Randomly choose between reflection and refraction
         if (random_uniform(state) < ref_prob) {
-            r.dir = reflect(normed_dir, hitrecord.normal);
+            r.direction = reflect(normed_dir, hitrecord.normal);
         } else {
-            r.dir = refract(normed_dir, hitrecord.normal, ref_ratio);
+            r.direction = refract(normed_dir, hitrecord.normal, ref_ratio);
         }
     }
 
     // Add a bit of fuzz
     if (fuzz > 0) {
-        r.dir = r.dir + fuzz * random_on_unit_sphere(state);
+        r.direction = r.direction + fuzz * random_on_unit_sphere(state);
     }
 
     // Standard updates
-    r.orig = hitrecord.hitPoint;
+    r.origin = hitrecord.hitPoint;
     light += emmision * col * c;
     c *= col;
 }

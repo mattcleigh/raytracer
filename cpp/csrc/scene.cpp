@@ -3,20 +3,20 @@
 using namespace std;
 
 // Return the background color based on the ray direction
-color get_background(const Ray &ray) {
-    vec3 unit_direction = ray.direction().normalize();
+float3 get_background(const Ray &ray) {
+    float3 unit_direction = ray.direction.normalize();
     auto a = 0.5 * (unit_direction.y() + 1.0);
-    return (1.0 - a) * color(1.0, 1.0, 1.0) + a * color(0.5, 0.7, 1.0);
+    return (1.0 - a) * float3(1.0, 1.0, 1.0) + a * float3(0.5, 0.7, 1.0);
 }
 
 // Check if a ray hits a sphere and update the hit record if it does
 void Sphere::ray_hit(HitRecord &hitrecord, const Ray &ray) const {
     // The vector from the ray origin to the center of the sphere
-    vec3 oc = center - ray.origin();
+    float3 oc = center - ray.origin;
 
     // Quadratic equation coefficients
-    float a = ray.direction().length_squared();
-    float h = dot(ray.direction(), oc);
+    float a = ray.direction.length_squared();
+    float h = dot(ray.direction, oc);
     float c = oc.length_squared() - radius * radius;
     float d = h * h - a * c;
 
@@ -27,18 +27,18 @@ void Sphere::ray_hit(HitRecord &hitrecord, const Ray &ray) const {
     // Update the hit information
     float root = (h - sqrt(d)) / a;
     if (0.0001 < root && root < hitrecord.distance) {
-        vec3 point = ray.at(root);
-        vec3 out_normal = (point - center) / radius;
+        float3 point = ray.at(root);
+        float3 out_normal = (point - center) / radius;
         hitrecord.update(ray, root, point, out_normal, mat);
     }
 }
 
 // Trace the path of a ray of light as it bounces around the scene and return its
 // color
-color trace_ray(Ray ray, const vector<Sphere> &spheres, int max_depth,
-                unsigned &state) {
-    color ray_color(1.0f);       // Initialize the color to black (color is multiplied)
-    color incoming_light(0.0f);  // Initialize the light to white (light is added)
+float3 trace_ray(Ray ray, const vector<Sphere> &spheres, int max_depth,
+                 unsigned &state) {
+    float3 ray_color(1.0f);       // Initialize the color to black (color is multiplied)
+    float3 incoming_light(0.0f);  // Initialize the light to white (light is added)
 
     // Maximum number of bounces
     for (int i = 0; i < max_depth; i++) {
